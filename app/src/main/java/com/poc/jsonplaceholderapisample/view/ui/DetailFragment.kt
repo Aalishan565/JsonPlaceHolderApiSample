@@ -12,6 +12,7 @@ import androidx.navigation.fragment.navArgs
 import com.poc.jsonplaceholderapisample.databinding.FragmentDetailBinding
 import com.poc.jsonplaceholderapisample.gateway.Resource
 import com.poc.jsonplaceholderapisample.model.dto.PostDto
+import com.poc.jsonplaceholderapisample.util.Util
 import com.poc.jsonplaceholderapisample.view.adapters.PostListAdapter
 import com.poc.jsonplaceholderapisample.viewModel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,6 +30,18 @@ class DetailFragment : Fragment() {
     val args: DetailFragmentArgs by navArgs()
     private val userViewModel: UserViewModel by activityViewModels()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        /*   val onBackPressedCallback = object : OnBackPressedCallback(true) {
+               override fun handleOnBackPressed() {
+                   NavHostFragment.findNavController(this@DetailFragment).navigateUp()
+               }
+           }
+           requireActivity().onBackPressedDispatcher.addCallback(
+               this, onBackPressedCallback
+           )*/
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,9 +54,18 @@ class DetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         userId = args.userId
-        userViewModel.callUser(userId)
-        observeUserDetailApi()
-        observeUserPostResponse()
+        if (Util.isOnline(requireActivity())) {
+            userViewModel.callUser(userId)
+            observeUserDetailApi()
+            observeUserPostResponse()
+        } else {
+            Toast.makeText(
+                requireActivity(),
+                "Please check your internet connection",
+                Toast.LENGTH_SHORT
+            )
+                .show()
+        }
     }
 
     private fun observeUserDetailApi() {

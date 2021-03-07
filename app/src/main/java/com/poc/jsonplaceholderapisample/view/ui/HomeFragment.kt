@@ -12,6 +12,7 @@ import androidx.navigation.Navigation
 import com.poc.jsonplaceholderapisample.databinding.FragmentHomeBinding
 import com.poc.jsonplaceholderapisample.gateway.Resource
 import com.poc.jsonplaceholderapisample.model.dto.UserDto
+import com.poc.jsonplaceholderapisample.util.Util
 import com.poc.jsonplaceholderapisample.view.adapters.UserListAdapter
 import com.poc.jsonplaceholderapisample.view.listeners.PostViewClickListener
 import com.poc.jsonplaceholderapisample.viewModel.UserViewModel
@@ -38,8 +39,17 @@ class HomeFragment : Fragment(), PostViewClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        userViewModel.callUserListApi()
-        observeUserListApiResponse()
+        if (Util.isOnline(requireActivity())) {
+            userViewModel.callUserListApi()
+            observeUserListApiResponse()
+        } else {
+            Toast.makeText(
+                requireActivity(),
+                "Please check your internet connection",
+                Toast.LENGTH_SHORT
+            )
+                .show()
+        }
     }
 
     private fun observeUserListApiResponse() {
@@ -47,6 +57,7 @@ class HomeFragment : Fragment(), PostViewClickListener {
             when (response) {
 
                 is Resource.Success -> {
+                    postList.clear()
                     homeBinding.progressBarHomeFragment.visibility = View.GONE
                     var hashMap = HashMap<Integer, Integer>()
                     for (post in response.data!!) {
