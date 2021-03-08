@@ -39,6 +39,7 @@ class HomeFragment : Fragment(), PostViewClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d(TAG,"onViewCreated")
         if (Util.isOnline(requireActivity())) {
             userViewModel.callUserListApi()
             observeUserListApiResponse()
@@ -94,6 +95,7 @@ class HomeFragment : Fragment(), PostViewClickListener {
     override fun onDestroy() {
         super.onDestroy()
         _homeBinding = null
+        Log.d(TAG,"onDestroy")
     }
 
     override fun postClicked(userId: Int) {

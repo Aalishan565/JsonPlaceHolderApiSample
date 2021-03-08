@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.poc.jsonplaceholderapisample.databinding.FragmentDetailBinding
 import com.poc.jsonplaceholderapisample.gateway.Resource
@@ -65,6 +66,9 @@ class DetailFragment : Fragment() {
                 Toast.LENGTH_SHORT
             )
                 .show()
+        }
+        detailFragmentBinding.tvUserEmail.setOnClickListener {
+            findNavController().popBackStack()
         }
     }
 
